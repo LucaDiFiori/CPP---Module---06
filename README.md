@@ -18,6 +18,11 @@ This module is designed to help you understand the different casts in CPP.
     - [Common Uses of static_cast](#common-uses-of-static_cast)
     - [Converting const and non-const Types](#converting-const-and-non-const-types)
     - [Example: Using static_cast in Different Contexts](#example-using-static_cast-in-different-contexts)
+- [DYNAMIC CAST](#dynamic-cast)
+    - [Purpose of dynamic_cast](#Purpose_of_dynamic_cast)
+    - [Syntax](#syntax)
+    - [Key Points](#key-points)
+    - [When to Use dynamic_cast](#when-to-use-dynamic_cast)
 
 ***
 ***
@@ -308,3 +313,161 @@ int main() {
     return 0;
 }
 ```
+
+***
+
+# DYNAMIC CAST
+In C++, dynamic_cast is used for **safe casting in situations involving polymorphism**, 
+allowing you to convert **pointers or references** within an inheritance hierarchy.
+Dynamic casting only occurs at runtime (during execution, not compilation), which is why we need 
+to handle possible failures.
+
+**Example first**
+```C++
+#include <iostream>
+#include <typeinfo>
+#include <exception>
+
+Class Parent                 {public : virtual ~Parent(void){}};
+Class Child1 : public Parent {};
+Class Child2 : public Parent {};
+
+//***************************************************************
+
+int main() {
+    Child   a;       //Reference value
+    Parent* b = &a;  //Implicit upcast --> OK
+
+    // (Dynamic cast using a POINTER)
+    //Explicit downcast 
+    Child1* c = dynamic_cast<Child *>(b);
+    if ( c == NULL) {
+        std::cout << "Conversin in NOT Ok" << std::endl;
+    }
+    else {
+        std::cout << "Conversion is ok" << std::endl;
+    }
+
+    //(Dynamic cast using a REFERENCE)
+    //Explicit downcast
+    try {
+        Child2& d = dynamic_cast<Child2 &>(*b); //b is a pointer, i need to unrefernce it with *
+        std::cout << "Conversion is Ok" << std::endl;
+    }
+    catch (std::bad_cast &bc) {
+        std::cout << "Conversion is NOT ok: " << bc.what() << std::endl;
+        retun (0);
+    }
+}
+```
+This code demonstrates dynamic casting in C++. Dynamic casting is primarily used 
+for safe **downcasting** in polymorphic class hierarchies, allowing you to attempt 
+casting a **pointer or reference of a base class (like Parent) to a derived class** (like Child1 or Child2). 
+Here's a breakdown:
+- **Class Hierarchy**:
+    - We have a base class Parent with two derived classes, Child1 and Child2.
+    - Parent has a virtual destructor (~Parent()) which makes the class polymorphic. This is necessary for dynamic_cast to work.
+
+- **Pointer Upcast**:
+```C++
+Parent* b = &a;
+```
+Here, *a* is an instance of Child1, and we assign its address to a Parent* pointer, *b*. 
+This is called upcasting (*a*) and is implicit and safe because Child1 is a Parent.
+the object *a* (an instance of Child1) is the one being cast:
+- a is of type Child1.
+- When we assign &a (the address of a) to the Parent* pointer b, a is implicitly cast to type Parent*.
+- This cast is safe and implicit because Child1 is derived from Parent, making every Child1 object inherently a Parent.
+
+- **Dynamic Casting Using a Pointer**:
+```C++
+Child1* c = dynamic_cast<Child1*>(b);
+```
+- we are creating a new pointer, c, of type Child1*. 
+- This is an explicit **downcast** attempt where we try to cast Parent* b to Child1*.
+- Since b actually points to a Child1 object (Parent* b = &a) , the cast succeeds, and c will not be NULL.
+- If b did not point to a Child1 object (e.g., if it pointed to a Child2 or actually pointed to an object that was 
+  a plain Parent instance), dynamic_cast would return NULL to indicate the cast failed.
+  - If b actually pointed to an object that was a plain Parent instance, the dynamic_cast to Child1* would fail. 
+    In that case, the cast result would be NULL. Here's why:
+    - **Object Type Check at Runtime**: dynamic_cast examines the actual type of the object that b points to at runtime. If b points to a Parent object (not a Child1 object), there's no way to safely cast it to Child1*, since Parent itself does not contain the extra data or behaviors of Child1.
+
+
+
+
+
+
+
+
+## Purpose of dynamic_cast
+- dynamic_cast is mainly used when working with polymorphic classes (classes that have **at least one virtual function**).
+- It allows you to safely cast a pointer or reference from a base class to a derived class.
+
+## Syntax
+```C++
+// Using a pointer
+derivedType* derivedPtr = dynamic_cast<derivedType*>(basePtr);
+if (derivedPtr) {
+    // Cast succeeded, safe to use derivedPtr
+} else {
+    // Cast failed, handle the error
+}
+```
+- basePtr is a pointer to a base class
+- derivedType is the type you want to cast to (usually a derived class).
+- We are Attempting to cast basePtr to a pointer of type derivedType*
+
+
+```C++
+// Using a Reference
+try {
+    derivedType& derivedRef = dynamic_cast<derivedType&>(baseRef);
+    // Cast succeeded, safe to use derivedRef
+} catch (const std::bad_cast& e) {
+    // Cast failed, handle the exception
+    std::cerr << "Cast failed: " << e.what() << std::endl;
+}
+```
+- baseRef is a reference to the base class.
+- derivedType is the type you want to cast to (typically a derived class).
+
+## Key Points
+- **Runtime Check**: dynamic_cast performs a runtime **check** to see if the object being cast is of the requested type.
+- **Null Return**: If casting a pointer and the cast fails (i.e., the object is not of the target type), dynamic_cast returns nullptr.
+- **Throws Exception**: When casting references instead of pointers, dynamic_cast throws a std::bad_cast exception if the cast fails.
+
+## Requirements
+- The base class must have at least one **virtual** function for dynamic_cast to work.
+- dynamic_cast can **only cast within related classes in the same hierarchy** (upcasting or downcasting).
+
+**Example**
+```C++
+#include <iostream>
+
+class Animal {
+public:
+    virtual ~Animal() {}  // Virtual destructor
+};
+
+class Dog : public Animal {
+public:
+    void bark() { std::cout << "Woof!" << std::endl; }
+};
+
+int main() {
+    Animal* animalPtr = new Dog;  // Upcasting to Animal
+
+    // Attempting to downcast to Dog
+    Dog* dogPtr = dynamic_cast<Dog*>(animalPtr);
+    if (dogPtr) {
+        dogPtr->bark();  // Safe to call, dynamic_cast succeeded
+    } else {
+        std::cout << "Cast failed!" << std::endl;
+    }
+
+    delete animalPtr;  // Clean up
+    return 0;
+}
+```
+
+Note: dynamic_cast incurs a small runtime overhead, so use it only when necessary, as frequent casting can impact performance.
