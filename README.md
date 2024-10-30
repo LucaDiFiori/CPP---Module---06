@@ -390,7 +390,30 @@ Child1* c = dynamic_cast<Child1*>(b);
   a plain Parent instance), dynamic_cast would return NULL to indicate the cast failed.
   - If b actually pointed to an object that was a plain Parent instance, the dynamic_cast to Child1* would fail. 
     In that case, the cast result would be NULL. Here's why:
-    - **Object Type Check at Runtime**: dynamic_cast examines the actual type of the object that b points to at runtime. If b points to a Parent object (not a Child1 object), there's no way to safely cast it to Child1*, since Parent itself does not contain the extra data or behaviors of Child1.
+    - **Object Type Check at Runtime**: dynamic_cast examines the actual type of the object that b points to at runtime. 
+      If b points to a Parent object (not a Child1 object), there's no way to safely cast it to Child1*, 
+      since Parent itself does not contain the extra data or behaviors of Child1.
+      ```C++
+        Parent p;        // A plain Parent object
+        Parent* b = &p;  // b points to Parent, not to Child1
+
+        Child1* c = dynamic_cast<Child1*>(b);  // This will fail
+        if (c == NULL) {
+        std::cout << "Conversion failed, b points to a Parent, not a Child1." << std::endl;
+        } else {
+        std::cout << "Conversion succeeded." << std::endl;
+        }
+      ```
+
+- **Dynamic Casting Using a Referenc**:
+```C++
+Child2& d = dynamic_cast<Child2&>(*b);
+```
+- Here, we attempt to cast Parent* b to a Child2& reference, requiring dereferencing (*b) to use dynamic_cast with a reference type
+- Since b actually points to a Child1 object and not a Child2 object, this cast will fail.
+- When dynamic_cast fails with a reference, it throws a std::bad_cast exception, which is caught in the catch block.
+- The catch block outputs "Conversion is NOT OK" and prints the error message from std::bad_cast.
+
 
 
 
