@@ -23,6 +23,7 @@ This module is designed to help you understand the different casts in CPP.
     - [Syntax](#syntax)
     - [Key Points](#key-points)
     - [When to Use dynamic_cast](#when-to-use-dynamic_cast)
+- [REINTERPRET CAST](#reinterpret-cast)
 
 ***
 ***
@@ -415,13 +416,6 @@ Child2& d = dynamic_cast<Child2&>(*b);
 - The catch block outputs "Conversion is NOT OK" and prints the error message from std::bad_cast.
 
 
-
-
-
-
-
-
-
 ## Purpose of dynamic_cast
 - dynamic_cast is mainly used when working with polymorphic classes (classes that have **at least one virtual function**).
 - It allows you to safely cast a pointer or reference from a base class to a derived class.
@@ -494,3 +488,9 @@ int main() {
 ```
 
 Note: dynamic_cast incurs a small runtime overhead, so use it only when necessary, as frequent casting can impact performance.
+
+
+***
+
+
+# REINTERPRET CAST
