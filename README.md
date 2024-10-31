@@ -28,6 +28,13 @@ This module is designed to help you understand the different casts in CPP.
     - [Syntax](#syntax)
     - [Usage Caution](#usage-caution)
     - [Restrictions](#restrictions)
+- [CONST CAST](#const-cast)
+    - [purpose](#purpose)
+    - [Syntax](#syntax)
+    - [Good Practice](#Good-Practice)
+- [TYPECAST OPERATOR (METHOD)](#typecast-operator-method)
+    - [Syntax](#syntax)
+- [EXPLICIT KEYWORD](#explicit-keyword)
 
 ***
 ***
@@ -517,8 +524,8 @@ targetType* newPtr = reinterpret_cast<targetType*>(originalPtr);
 1. Suppose you want to reinterpret the binary data of an integer as a pointer or vice versa:
 ```C++
 int num = 42;
-// Cast integer to a void pointer
-void* ptr = reinterpret_cast<void*>(&num);
+// Cast integer to a void pointer (inplicit promotion)
+void* ptr = &num;
 
 // Cast void pointer back to int pointer and dereference
 int* intPtr = reinterpret_cast<int*>(ptr);
@@ -577,3 +584,133 @@ int main() {
 - reinterpret_cast cannot convert between different types of non-pointer types 
   (e.g., you can't directly cast int to double with it).
 - It's not portable in all cases, as it depends on specific memory representations.
+
+
+# CONST CAST
+In C++, **const_cast** is used to **add or remove const (or volatile) qualifiers** from a 
+variable. This can be useful when you need to change the const-ness of a variable, 
+often for backward compatibility with code that requires a non-const parameter.
+
+## Purpose
+- **const_cast** is primarily used to modify the **const** or **volatile** qualifiers of a variable.
+- It's often employed when you need to work with APIs that don't support const parameters, 
+  or when you need to modify a const variable temporarily.
+
+## Syntax
+```C++
+TargetType newVariable = const_cast<TargetType>(variableToCast);
+```
+
+**Example**
+1. Ex1:
+```C++
+int main() {
+    int  a = 42;  // reference vaue
+
+    int const* b = &a;                  //Implicit "promotion" --> OK
+    int*       c = b;                   //Implicit demotion    --> NOT OK
+    int*       d = const_cast<int*>(b)  // Explicit demotion   --> OK, I OBEY
+```
+
+1. Ex2:
+```C++
+#include <iostream>
+
+void changeValue(int* ptr) {
+    *ptr = 100;
+}
+
+int main() {
+    const int num = 50;
+    std::cout << "Before: " << num << std::endl;
+
+    // Remove const qualifier to pass num to a function that expects int*
+    changeValue(const_cast<int*>(&num));
+
+    std::cout << "After: " << num << std::endl; // Undefined behavior
+    return 0;
+}
+```
+
+## Good Practice
+const_cast should not be used to modify actual const data, as this can easily 
+lead to undefined behavior. Instead, it's better for cases where the const 
+qualifier is used for logical const-ness (e.g., passing a mutable object as 
+const to prevent accidental changes).
+
+# TYPECAST OPERATOR (METHOD)
+The cast operator as a method of a class in C++ refers to creating a custom type 
+conversion operator within a class, allowing an object of the class to be implicitly 
+or explicitly converted to another type. This is done by overloading the **operator Type()** 
+function, where Type is the target type you want to convert the class object to.
+
+## Syntax
+**Define a conversion operator**: The syntax for a type conversion operator in a class is:
+```C++
+operator target_type() const;
+```
+- **operator** tells the compiler you're defining a conversion operator
+- **target_type** is the type you want to convert to.
+- **const** is often used if you're not modifying the object during the conversion
+
+**Example**
+```C++
+#include <iostream>
+
+class Foo {
+    private:
+        float _v;
+    
+    public:
+        Foo (float const v) : _v(v) {}
+        
+        float getV(void)
+        {
+            return (this->_v);
+        }
+
+        //Typecast operator
+        operator float()
+        {
+            return (return -> _v);
+        }
+
+        operator int()
+        {
+            return (static_cast<int>(this->_v));
+        }
+}
+
+//********************************************************
+
+int main()
+{
+    Foo   a(420.024f);
+
+    // Thanks to my cast operator, I can initialize a float or int variable directly with my a instance
+    float b = a;
+    int   c = a;
+
+    std::cout << a.getV() << std::endl;
+    std::cout << b << std::endl;
+    std::cout << c << std::endl;
+}
+```
+Output
+```BASH
+420.024
+420.024
+420
+```
+
+# EXPLICIT KEYWORD
+The explicit keyword in C++ is used to prevent the compiler from using certain 
+constructors or conversion operators implicitly. This helps avoid unintentional 
+conversions and improves code safety and readability. 
+
+You can apply explicit to:
+- **Constructors**
+- **Conversion Operators**
+
+Using explicit can stop the compiler from performing automatic type conversions, 
+which can sometimes lead to unexpected bugs.
