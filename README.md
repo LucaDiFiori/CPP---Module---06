@@ -638,6 +638,8 @@ lead to undefined behavior. Instead, it's better for cases where the const
 qualifier is used for logical const-ness (e.g., passing a mutable object as 
 const to prevent accidental changes).
 
+***
+
 # TYPECAST OPERATOR (METHOD)
 The cast operator as a method of a class in C++ refers to creating a custom type 
 conversion operator within a class, allowing an object of the class to be implicitly 
@@ -702,6 +704,8 @@ Output
 420.024
 420
 ```
+
+***
 
 # EXPLICIT KEYWORD
 The explicit keyword in C++ is used to prevent the compiler from using certain 
