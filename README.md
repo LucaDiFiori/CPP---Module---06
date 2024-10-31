@@ -529,7 +529,7 @@ std::cout << *intPtr;  // Output will be 42
    Let's say we have two unrelated classes, Dog and Cat, with their own attributes and methods. 
    Using reinterpret_cast, we can cast a Dog* to a Cat*. However, this is generally 
    unsafe and serves more as an illustration of the syntax rather than a recommended practice
-```C+
+```C++
 #include <iostream>
 #include <cstring>
 
