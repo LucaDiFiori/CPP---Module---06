@@ -35,6 +35,9 @@ This module is designed to help you understand the different casts in CPP.
 - [TYPECAST OPERATOR (METHOD)](#typecast-operator-method)
     - [Syntax](#syntax)
 - [EXPLICIT KEYWORD](#explicit-keyword)
+    - [explicit Keyword with Constructors](#explicit-keyword-with-constructors)
+        - [syntax](#syntax)
+        - [Example](#example)
 
 ***
 ***
@@ -718,3 +721,108 @@ You can apply explicit to:
 
 Using explicit can stop the compiler from performing automatic type conversions, 
 which can sometimes lead to unexpected bugs.
+
+## explicit Keyword with Constructors
+By default, a constructor with a single parameter **acts as an implicit conversion constructor**
+This means it can be called automatically to convert an object from one type to 
+the type of the class containing the constructor. Marking a constructor as explicit 
+disables this implicit behavior.
+
+### Syntax
+```C++
+class ClassName {
+public:
+    explicit ClassName(Type param) {
+        // Constructor logic
+    }
+};
+```
+
+### Example
+```C++
+#include <iostream> 
+
+Class A {};
+Class B {};
+
+Class C {
+    public:
+                 C (const A &_) {return;}
+        explicit C (const B &_) {return;}
+};
+
+//***************************************
+
+void f( const C &_) { return; }
+
+//***************************************
+
+int main()
+{
+    f (A());  //Implicit conversion  --> OK
+              /*(Function f takes a reference to a C object, and I'm passing an A object. 
+                The compiler converts the A object into a C objec) */
+
+    f (B());  //Implicit conversion NOT OK, costructor is explicit
+}
+```
+**Explanation**
+- *class A {}*: Sample class.
+- *class B {}*: Sample class.
+- *class C {}* This class has two constructors:
+    - **C(const A &_)**: This constructor can accept an object of type A and can be called **implicitly**, 
+      meaning that the compiler can automatically create an instance of C from an instance of A
+    - **explicit C(const B &_)**: This constructor accepts an object of type B but is marked explicit, 
+      meaning that **it cannot be called implicitly**. 
+
+- *void f(const C &_)*: This function takes a reference to a const C object. 
+  It does not perform any operations in this example, but the important part is 
+  how the function can accept different types of arguments.
+    - *f(A())*: This line creates a temporary object of type A and tries to pass it to the function f. Because there is a constructor C(const A &_) available (which allows implicit conversion), the compiler creates a temporary C object using the A object and passes it to f. Thus, this line is **valid** and the implicit conversion works fine.
+    - *f(B())*: This line creates a temporary object of type B. Here, the compiler looks for a way to convert B into C. However, because the constructor C(const B &_) is marked as explicit, it does not allow implicit conversions. Therefore, this line results in a **compilation error** because the function f cannot accept a B object directly and there is no implicit conversion available.
+
+
+
+
+
+
+
+
+
+
+
+## explicit Keyword with Conversion Operators
+Similarly, when overloading a cast operator within a class, explicit can prevent 
+implicit conversions, requiring the conversion to be explicit.
+
+**Example**
+Here’s an example of using explicit with a cast operator in a class that represents a Box. 
+The Box class has a cast operator to convert it to an int, representing the volume of the box.
+
+When the cast operator is marked as explicit, you must use static_cast to perform the conversion.
+```C++
+#include <iostream>
+
+class Box {
+    int length, width, height;
+
+public:
+    Box(int l, int w, int h) : length(l), width(w), height(h) {}
+
+    // Explicit cast operator to convert Box to int (volume)
+    explicit operator int() const {
+        return length * width * height;
+    }
+};
+
+int main() {
+    Box myBox(3, 4, 5);
+
+    // int volume = myBox;  // Error: Implicit conversion not allowed
+
+    int volume = static_cast<int>(myBox);  // OK: Explicit cast required
+
+    std::cout << "Volume: " << volume << std::endl;  // Output: 60
+    return 0;
+}
+```
