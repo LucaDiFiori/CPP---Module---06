@@ -90,6 +90,29 @@ This module is designed to help you understand the different casts in CPP.
 - This operator enables implicit conversions, which can make the code more intuitive 
   but should be used carefully to avoid unintended conversions.
 
+**Table**
+| Cast actions:      | Conversion | reinterpretation | Upcast   | Downcast   | Type qualifier reint. |
+|--------------------|------------|--------|---------|----------|------------|-----------------------|
+| `Implicit`         | Yes        |        | Yes     | Yes      |            |                       |
+| `static_cast`      | Yes        |        | Yes     | Yes      | Yes        |                       |
+| `dynamic_cast`     |            |        |         | Yes      | Yes        |                       |
+| `const_cast`       |            |        |         |          |            | Yes                   |
+| `reinterpret_cast` |            | Yes    |         | Yes      | Yes        |                       |
+|--------------------|------------|--------|---------|----------|------------|-----------------------|
+| `Legacy C cast`    | Yes        | Yes    | Yes     | Yes      | Yes        | Yes                   |
+
+---
+
+| Cast               | Semantic check | Reliable at run | Tested at run |
+|--------------------|----------------|-----------------|---------------|
+| `Implicit`         | Yes            | Yes             |               |
+| `static_cast`      | Yes            |                 |               |
+| `dynamic_cast`     | Yes            | Yes             | Yes           |
+| `const_cast`       |                |                 |               |
+| `reinterpret_cast` |                |                 |               |
+|--------------------|----------------|-----------------|---------------|
+| `Legacy C cast`    |                |                 |               |
+
 
 ***
 ***
