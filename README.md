@@ -412,10 +412,15 @@ int main() {
 ***
 
 # DYNAMIC CAST
-In C++, dynamic_cast is used for **safe casting in situations involving polymorphism**, 
-allowing you to convert **pointers or references** within an inheritance hierarchy.
+In C++, dynamic_cast is used for **safe casting in situations involving polymorphism**, meaning it can convert a **pointer** or **reference** of a base class type to a derived class type, but only if the object is actually of the derived type. 
+
 Dynamic casting only occurs at runtime (during execution, not compilation), which is why we need 
 to handle possible failures.
+ 
+For dynamic_cast to work, the class must include **at least one virtual function**, which enables Run-Time Type Information (RTTI). RTTI provides information about the actual type of an object during runtime, which dynamic_cast relies on to check the validity of the cast.
+
+Without a virtual function, **RTTI** is not enabled, and dynamic_cast will not work with pointers or references to classes lacking virtual functions, as the compiler cannot determine the object’s true type at runtime.
+
 
 **Example first**
 ```C++
