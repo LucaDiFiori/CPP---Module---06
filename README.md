@@ -97,7 +97,7 @@ This module is designed to help you understand the different casts in CPP.
 |                    |**Cast action**  |                  |          |            |                      |
 |                    |-----------------|                  |          |            |                      |
 | **Cast type**      | Conversion      | reinterpretation | Upcast   | Downcast   | Type qualifier reint.|
-||-------------------|                 |                  |          |            |                      |
+|_-------------------|                 |                  |          |            |                      |
 | `Implicit`         | Yes             |                  | Yes      |            |                      |
 | `static_cast`      | Yes             |                  | Yes      | Yes        |                      |
 | `dynamic_cast`     |                 |                  | Yes      | Yes        |                      |
