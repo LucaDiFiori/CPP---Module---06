@@ -101,7 +101,7 @@ This module is designed to help you understand the different casts in CPP.
 | `reinterpret_cast` |            | Yes    |         | Yes      | Yes        |                       |
 | `Legacy C cast`    | Yes        | Yes    | Yes     | Yes      | Yes        | Yes                   |
 
----
+***
 
 | Cast               | Semantic check | Reliable at run | Tested at run |
 |--------------------|----------------|-----------------|---------------|
