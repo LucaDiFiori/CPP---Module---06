@@ -91,6 +91,7 @@ This module is designed to help you understand the different casts in CPP.
   but should be used carefully to avoid unintended conversions.
 
 **Table**
+
 | Cast actions:      | Conversion | reinterpretation | Upcast   | Downcast   | Type qualifier reint. |
 |--------------------|------------|--------|---------|----------|------------|-----------------------|
 | `Implicit`         | Yes        |        | Yes     | Yes      |            |                       |
