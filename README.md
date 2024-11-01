@@ -95,27 +95,28 @@ This module is designed to help you understand the different casts in CPP.
 
 **Table**
 
-|                    | **Cast action**      |                  |          |            |                       |
-|--------------------|----------------------|------------------|----------|------------|-----------------------|
-| **Cast type**      | Conversion           | Reinterpretation | Upcast   | Downcast   | Type qualifier reint. |
-| `Implicit`         | Yes                  |                  | Yes      |            |                       |
-| `static_cast`      | Yes                  |                  | Yes      | Yes        |                       |
-| `dynamic_cast`     |                      |                  | Yes      | Yes        |                       |
-| `const_cast`       |                      |                  |          |            | Yes                   |
-| `reinterpret_cast` |                      | Yes              | Yes      | Yes        |                       |
-| `C cast`           | Yes                  | Yes              | Yes      | Yes        | Yes                   |
+|                    | **CAST ACTIONS**     |                    |            |            |                        |
+|--------------------|----------------------|--------------------|------------|------------|------------------------|
+| **CAST TYPE**      | *Conversion*         | *Reinterpretation* | *Upcast*   | *Downcast* | *Type qualifier reint.*|
+| `Implicit`         | Yes                  |                    | Yes        |            |                        |
+| `static_cast`      | Yes                  |                    | Yes        | Yes        |                        |
+| `dynamic_cast`     |                      |                    | Yes        | Yes        |                        |
+| `const_cast`       |                      |                    |            |            | Yes                    |
+| `reinterpret_cast` |                      | Yes                | Yes        | Yes        |                        |
+| `C cast`           | Yes                  | Yes                | Yes        | Yes        | Yes                    |
 
 
 ---
 
-| Cast               | Semantic check | Reliable at run | Tested at run |
-|--------------------|----------------|-----------------|---------------|
-| `Implicit`         | Yes            | Yes             |               |
-| `static_cast`      | Yes            |                 |               |
-| `dynamic_cast`     | Yes            | Yes             | Yes           |
-| `const_cast`       |                |                 |               |
-| `reinterpret_cast` |                |                 |               |
-| `C cast`           |                |                 |               |
+|                    | **SAFETY**          |                   |                 |
+|--------------------|---------------------|-------------------|-----------------|
+| **CAST TYPE**      | *Semantic check*    | *Reliable at run* | *Tested at run* |
+| `Implicit`         | Yes                 | Yes               |                 |
+| `static_cast`      | Yes                 |                   |                 |
+| `dynamic_cast`     | Yes                 | Yes               | Yes             |
+| `const_cast`       |                     |                   |                 |
+| `reinterpret_cast` |                     |                   |                 |
+| `C cast`           |                     |                   |                 |
 
 
 ***
