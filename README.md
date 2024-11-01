@@ -94,15 +94,16 @@ This module is designed to help you understand the different casts in CPP.
 ***
 
 **Table**
-
-| Cast actions:      | Conversion | reinterpretation | Upcast   | Downcast   | Type qualifier reint. |
+|                    | Cast action                                                                   |
+|--------------------|-------------------------------------------------------------------------------|
+| Cast type          | Conversion | reinterpretation | Upcast   | Downcast   | Type qualifier reint. |
 |--------------------|------------|------------------|----------|------------|-----------------------|
 | `Implicit`         | Yes        |                  | Yes      |            |                       |
 | `static_cast`      | Yes        |                  | Yes      | Yes        |                       |
 | `dynamic_cast`     |            |                  | Yes      | Yes        |                       |
 | `const_cast`       |            |                  |          |            | Yes                   |
 | `reinterpret_cast` |            | Yes              | Yes      | Yes        |                       |
-| `Legacy C cast`    | Yes        | Yes              | Yes      | Yes        | Yes                   |
+| `C cast`           | Yes        | Yes              | Yes      | Yes        | Yes                   |
 
 ---
 
@@ -113,7 +114,7 @@ This module is designed to help you understand the different casts in CPP.
 | `dynamic_cast`     | Yes            | Yes             | Yes           |
 | `const_cast`       |                |                 |               |
 | `reinterpret_cast` |                |                 |               |
-| `Legacy C cast`    |                |                 |               |
+| `C cast`           |                |                 |               |
 
 
 ***
