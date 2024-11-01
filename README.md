@@ -99,10 +99,9 @@ This module is designed to help you understand the different casts in CPP.
 | `dynamic_cast`     |            |        |         | Yes      | Yes        |                       |
 | `const_cast`       |            |        |         |          |            | Yes                   |
 | `reinterpret_cast` |            | Yes    |         | Yes      | Yes        |                       |
-|--------------------|------------|--------|---------|----------|------------|-----------------------|
 | `Legacy C cast`    | Yes        | Yes    | Yes     | Yes      | Yes        | Yes                   |
 
-
+---
 
 | Cast               | Semantic check | Reliable at run | Tested at run |
 |--------------------|----------------|-----------------|---------------|
