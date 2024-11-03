@@ -19,6 +19,7 @@
 #  define GREEN "\033[1;32m"
 #  define CYAN "\033[1;36m"
 #  define RED "\033[1;31m"
+#  define YELLOW "\033[1;33m"
 #  define RESET "\033[0m"
 # endif
 
@@ -32,8 +33,9 @@
 // Enum for the type of the input (used in the switch case)
 enum check
 {
-	INFNAN,
-	VALID
+	INF_CONVERSION,
+	NAN_CONVERSION,
+	BASIC_CONVERSION
 };
 
 class ScalarConverter
@@ -45,7 +47,7 @@ class ScalarConverter
 		//input: the input string to convert
 		static std::string _input;
 		//type: the type of the input used for the switch case
-		static check _check;
+		static check _type;
 		//char: the char value of the input used for the conversion
 		static char _char;
 		//int: the int value of the input used for the conversion
@@ -58,6 +60,8 @@ class ScalarConverter
 		//----------------------------------------------------------------------
 		//                               UTILS
 		//----------------------------------------------------------------------
+
+	    //___________________________________________________________check_utils
 		// Check if the input is an infinite or a NaN
 		static bool isInfNan(std::string& input); //--> se lo trovo setto _check a INFNAN
 		// Check if the input is a valid type
@@ -65,24 +69,29 @@ class ScalarConverter
 		//chiamo isInfnNan e nel caso esco, controllo se c'è piu di una lettera, se c'è una lettera sola controllare che sia o singola o una f alla fine, se c'è un punto e se c'è un segno (e ne tengo il conto), 
 
 
-
+		//_________________________________________________________convert_utils
 		// Convert the input to a char
-		//static void toChar();
+		static void toChar();
 		// Convert the input to an int
-		//static void toInt();             //--> Questi fanno eseguono controlli (es per gli int se è un nan o un inf o se è fuori range) e verranno chiamati tutti
+		static void toInt();             //--> Questi fanno eseguono controlli (es per gli int se è un nan o un inf o se è fuori range) e verranno chiamati tutti
 		// Convert the input to a float
-		//static void toFloat();
+		static void toFloat();
 		// Convert the input to a double
-		//static void toDouble();
+		static void toDouble();
+		// Convert the input to an infinite or a NaN double value
+		static void toDoubleInfNan();    
+		// Convert the input to an infinite or a NaN float value
+		static void toFloatInfNan();
 		
+	    //___________________________________________________________print_utils	
 		// Print the char
-		//static void printChar();
+		static void printChar(bool isPrintable);
 		// Print the int
-		//static void printInt();
+		static void printInt(bool isPrintable);
 		// Print the float             //--> forse questi non servono
-		//static void printFloat();
+		static void printFloat(bool isPrintable);
 		// Print the double
-		//static void printDouble();
+		static void printDouble(bool isPrintable);
 		/* sarebbero cose del genere
 			void ScalarConverter::printInt(int value) {
     		std::cout << "int: " << value << std::endl;
@@ -126,18 +135,7 @@ class ScalarConverter
 #include <stdexcept>
 #include <cmath> // Per std::isinf e std::isnan
 
-void ScalarConverter::toChar(const std::string& input) {
-    try {
-        int value = std::stoi(input);
-        if (value < std::numeric_limits<char>::min() || value > std::numeric_limits<char>::max()) {
-            throw std::out_of_range("Value out of char range");
-        }
-        char c = static_cast<char>(value);
-        std::cout << "char: '" << c << "'" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << "char: impossible" << std::endl;
-    }
-}
+
 
 void ScalarConverter::toInt(const std::string& input) {
     try {
