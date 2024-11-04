@@ -107,9 +107,3 @@ class ScalarConverter
 };
 
 #endif
-
-
-
-/*COSE DA FARE
-- SCRIVERE LE FUNZIONI TO...() CON QUELLO MESO NELL'ENUM
-*/
