@@ -1,4 +1,4 @@
-NAME = conversion
+NAME = ScalarConverter
 CC = g++
 CPPFLAGS = -Wall -Wextra -Werror -std=c++98
 
